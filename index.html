@@ -61,8 +61,8 @@
       animation: wrongPulse 1s infinite alternate;
     }
     @keyframes wrongPulse {
-      0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
-      100% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
+      0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.45); }
+      100% { box-shadow: 0 0 0 12px rgba(220, 38, 38, 0); }
     }
     .lcd-screen {
       background: linear-gradient(180deg, #063928 0%, #042419 100%);
@@ -102,9 +102,10 @@
   <!-- Toast Notification Container -->
   <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
 
-  <!-- Header -->
+  <!-- Sticky Consumer Header -->
   <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/90 shadow-sm">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+      <!-- Brand + Fixed Ghatkesar Location -->
       <div class="flex items-center gap-3">
         <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#FC8019] to-[#F9C935] flex items-center justify-center shadow-md shadow-orange-500/25">
           <i data-lucide="car-front" class="w-6 h-6 text-white"></i>
@@ -112,11 +113,11 @@
         <div>
           <div class="flex items-center gap-2">
             <h1 class="font-black text-lg sm:text-xl tracking-tight text-slate-900">ParkSync</h1>
-            <span class="px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider rounded-full bg-orange-100 text-[#FC8019] border border-orange-200">IoT v6.0</span>
+            <span class="px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider rounded-full bg-orange-100 text-[#FC8019] border border-orange-200">Express</span>
           </div>
           <div class="flex items-center gap-1 text-xs text-slate-500 font-medium">
             <i data-lucide="map-pin" class="w-3.5 h-3.5 text-[#FC8019]"></i>
-            <span>Ghatkesar, Telangana • 6-Digit OTP & Dual-Gate System</span>
+            <span>Ghatkesar, Telangana • Smart RFID & OTP Gate Hub</span>
           </div>
         </div>
       </div>
@@ -135,21 +136,29 @@
         <button type="button" onclick="switchTab('logs')" id="tab-btn-logs" class="px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:text-slate-900">
           <span class="flex items-center gap-1.5"><i data-lucide="message-square-text" class="w-4 h-4"></i><span>SMS Logs</span></span>
         </button>
-        <button type="button" onclick="switchTab('sync')" id="tab-btn-sync" class="px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:text-slate-900" title="Admin Sync & Overrides">
-          <span class="flex items-center gap-1"><i data-lucide="shield-alert" class="w-4 h-4"></i><span class="hidden md:inline">Admin</span></span>
+        <button type="button" onclick="switchTab('sync')" id="tab-btn-sync" class="px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:text-slate-900" title="Admin Console, RFID Wallet Editor & Overrides">
+          <span class="flex items-center gap-1"><i data-lucide="shield-alert" class="w-4 h-4"></i><span>Admin & RFID</span></span>
         </button>
       </nav>
 
-      <!-- Role Switcher & Status Pills -->
-      <div class="flex flex-wrap items-center gap-2">
+      <!-- Role Switcher, Notifications, Sound & Cloud Status -->
+      <div class="flex flex-wrap items-center gap-1.5">
         <button type="button" onclick="openAuthModal()" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold flex items-center gap-1.5 shadow-sm transition">
-          <i data-lucide="shield" class="w-4 h-4 text-[#F9C935]"></i>
+          <i data-lucide="shield" class="w-3.5 h-3.5 text-[#F9C935]"></i>
           <span id="current-role-badge">Pass #1: Hemanth</span>
           <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400"></i>
         </button>
-        <button type="button" onclick="openSharePassModal()" class="px-3 py-1.5 rounded-xl bg-orange-50 hover:bg-orange-100 border border-orange-200 text-[#FC8019] text-xs font-extrabold flex items-center gap-1.5 transition">
+        <button type="button" onclick="openSharePassModal()" class="px-2.5 py-1.5 rounded-xl bg-orange-50 hover:bg-orange-100 border border-orange-200 text-[#FC8019] text-xs font-extrabold flex items-center gap-1 transition" title="Share Private Pass on WhatsApp">
           <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
-          <span class="hidden sm:inline">Share Pass</span>
+          <span class="hidden sm:inline">Share</span>
+        </button>
+        <button type="button" onclick="requestBrowserNotifications()" id="btn-notify" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1 transition" title="Allow Browser Push Notifications">
+          <i data-lucide="bell" class="w-3.5 h-3.5 text-[#FC8019]"></i>
+          <span id="notify-label" class="hidden md:inline">Alerts</span>
+        </button>
+        <button type="button" onclick="toggleSound()" id="btn-sound" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1 transition" title="Toggle Buzzer Sound">
+          <i data-lucide="volume-2" class="w-3.5 h-3.5 text-emerald-600"></i>
+          <span id="sound-label" class="hidden lg:inline">Audio ON</span>
         </button>
         <div id="cloud-sync-pill" class="px-2.5 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-[11px] font-bold text-emerald-700 flex items-center gap-1.5">
           <span id="cloud-dot" class="w-2 h-2 rounded-full bg-emerald-500 led-pulse"></span>
@@ -168,16 +177,16 @@
         <span>Switch User Account (Driver PIN: <code class="font-mono text-slate-900">1234</code> | Admin Secret PIN: <code class="font-mono text-slate-900">0409</code>):</span>
       </div>
       <div class="flex flex-wrap items-center gap-1.5">
-        <button type="button" onclick="promptRoleSwitch(1)" id="quick-role-1" class="px-3 py-1.5 rounded-xl text-xs font-extrabold border transition">Pass #1 (A3:F1:9B:02)</button>
-        <button type="button" onclick="promptRoleSwitch(2)" id="quick-role-2" class="px-3 py-1.5 rounded-xl text-xs font-extrabold border transition">Pass #2 (B7:4C:2D:19)</button>
-        <button type="button" onclick="promptRoleSwitch(3)" id="quick-role-3" class="px-3 py-1.5 rounded-xl text-xs font-extrabold border transition">Pass #3 (E4:88:1A:55)</button>
+        <button type="button" onclick="promptRoleSwitch(1)" id="quick-role-1" class="px-3 py-1.5 rounded-xl text-xs font-extrabold border transition">Pass #1</button>
+        <button type="button" onclick="promptRoleSwitch(2)" id="quick-role-2" class="px-3 py-1.5 rounded-xl text-xs font-extrabold border transition">Pass #2</button>
+        <button type="button" onclick="promptRoleSwitch(3)" id="quick-role-3" class="px-3 py-1.5 rounded-xl text-xs font-extrabold border transition">Pass #3</button>
         <button type="button" onclick="promptRoleSwitch('admin')" id="quick-role-admin" class="px-3 py-1.5 rounded-xl text-xs font-extrabold border transition flex items-center gap-1">
-          <i data-lucide="lock" class="w-3 h-3"></i><span>Admin Panel</span>
+          <i data-lucide="lock" class="w-3 h-3"></i><span>Admin (0409)</span>
         </button>
       </div>
     </div>
 
-    <!-- WRONG-SLOT ALARM BANNER (Appears automatically if IR detects car in unbooked slot) -->
+    <!-- WRONG-SLOT ALARM BANNER (Appears automatically if IR detects car in unallotted slot) -->
     <div id="wrong-slot-banner" class="hidden"></div>
 
     <!-- 3-ATTEMPT OTP LOCKOUT BANNER (Appears if 3 wrong OTPs entered) -->
@@ -231,8 +240,8 @@
         <div class="lg:col-span-7 space-y-4">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <h2 class="text-lg font-black text-slate-900">Live Smart Parking Bays & IR Sensor Status</h2>
-              <p class="text-xs text-slate-500">Toggle IR Car Sensor on any Green bay without booking to test <strong>Wrong-Slot Buzzer Alert</strong></p>
+              <h2 class="text-lg font-black text-slate-900">Live Smart Parking Bays & IR Occupancy</h2>
+              <p class="text-xs text-slate-500">Click <strong>"Simulate Wrong-Slot Car (IR)"</strong> on any Green/Red bay to test the Wrong-Slot Alarm</p>
             </div>
             <span id="esp-live-indicator" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600 border border-slate-200">ESP32: Standby</span>
           </div>
@@ -245,7 +254,7 @@
               <div class="space-y-1">
                 <div class="flex items-center gap-2">
                   <span class="px-2 py-0.5 rounded-full bg-[#F9C935] text-slate-950 text-[10px] font-black uppercase">Entry Gate #1 (OTP + Keypad)</span>
-                  <span id="otp-attempts-pill" class="px-2 py-0.5 rounded-full bg-white/10 text-emerald-300 text-[10px] font-mono font-bold">Attempts: 0/3</span>
+                  <span id="otp-attempts-pill" class="px-2 py-0.5 rounded-full bg-white/10 text-emerald-300 text-[10px] font-mono font-bold">Strikes: 0/3</span>
                 </div>
                 <h3 class="text-base font-black">Arrived at Entry Gate? Enter 6-Digit OTP</h3>
                 <p class="text-xs text-slate-300">3 wrong attempts trigger a <strong>10-minute security ban</strong> & buzzer alarm</p>
@@ -281,14 +290,14 @@
                 <select id="book-slot" class="w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold text-slate-900 focus:outline-none focus:border-[#FC8019]"></select>
               </div>
               <div>
-                <label class="block text-[11px] font-bold text-slate-600 mb-1">Registered RFID Pass</label>
-                <select id="book-rfid" onchange="updateFormWalletDisplay()" class="w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold text-slate-900 focus:outline-none focus:border-[#FC8019]"></select>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">RFID Pass / Guest Mode</label>
+                <select id="book-rfid" onchange="handleRfidSelectChange()" class="w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold text-slate-900 focus:outline-none focus:border-[#FC8019]"></select>
               </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label class="block text-[11px] font-bold text-slate-600 mb-1">Driver Name</label>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">Driver / Guest Name</label>
                 <input id="book-name" type="text" required placeholder="Hemanth Reddy" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#FC8019]" />
               </div>
               <div>
@@ -381,7 +390,7 @@
           </div>
         </div>
 
-        <!-- Dual-Gate Visual Simulators (Entry Gate Servo + Exit Gate Servo) & Wrong-Slot IR Tester -->
+        <!-- Dual-Gate Visual Simulators & Wrong-Slot IR Tester -->
         <div class="lg:col-span-6 space-y-5">
           <!-- Dual Gate Card -->
           <div class="app-card rounded-3xl p-6 space-y-4">
@@ -423,20 +432,7 @@
             <!-- Exit Gate MFRC522 RFID Scan Buttons -->
             <div class="space-y-2 pt-1">
               <p class="text-xs font-extrabold text-slate-700">Tap MFRC522 RFID Tag at Exit Gate #2 (Logs OUT Time & Calculates Bill):</p>
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <button type="button" onclick="simulateExitRfidTap(1)" class="p-2.5 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200 text-left transition">
-                  <span class="text-[10px] font-bold text-emerald-700 block">EXIT RFID #1</span>
-                  <span class="font-mono font-black text-xs text-slate-900">A3:F1:9B:02</span>
-                </button>
-                <button type="button" onclick="simulateExitRfidTap(2)" class="p-2.5 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200 text-left transition">
-                  <span class="text-[10px] font-bold text-emerald-700 block">EXIT RFID #2</span>
-                  <span class="font-mono font-black text-xs text-slate-900">B7:4C:2D:19</span>
-                </button>
-                <button type="button" onclick="simulateExitRfidTap(3)" class="p-2.5 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200 text-left transition">
-                  <span class="text-[10px] font-bold text-emerald-700 block">EXIT RFID #3</span>
-                  <span class="font-mono font-black text-xs text-slate-900">E4:88:1A:55</span>
-                </button>
-              </div>
+              <div id="exit-rfid-buttons" class="grid grid-cols-1 sm:grid-cols-3 gap-2"></div>
             </div>
           </div>
 
@@ -457,7 +453,7 @@
 
     <!-- TAB 3: EXACT UPLOADED BLOCK DIAGRAM & FLOW CHART -->
     <section id="tab-diagrams" class="hidden space-y-8">
-      <!-- Block Diagram Card (Matches Code_Generated_Image.png) -->
+      <!-- Block Diagram Card -->
       <div class="app-card rounded-3xl p-6 sm:p-8 space-y-6 bg-white">
         <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
           <div>
@@ -467,10 +463,8 @@
           <span class="text-xs font-mono font-bold text-slate-500">ESP32 Dual-Core Controller</span>
         </div>
 
-        <!-- Clean Draw.io Style Block Diagram -->
         <div class="max-w-4xl mx-auto py-4">
           <div class="grid grid-cols-1 md:grid-cols-11 gap-4 items-center">
-            <!-- Left Inputs (4 Cols) -->
             <div class="md:col-span-4 space-y-3">
               <div class="border-2 border-slate-900 rounded-md p-3 text-center bg-white shadow-sm">
                 <p class="font-bold text-sm text-slate-900">RFID Reader (MFRC522)</p>
@@ -494,7 +488,6 @@
               </div>
             </div>
 
-            <!-- Arrows Left to Center (1 Col) -->
             <div class="hidden md:flex md:col-span-1 flex-col justify-around h-full py-6 items-center text-slate-900 font-mono font-black">
               <span>───►</span>
               <span>───►</span>
@@ -503,12 +496,10 @@
               <span>◄──►</span>
             </div>
 
-            <!-- Center ESP32 Module (2 Cols) -->
             <div class="md:col-span-2 border-2 border-slate-900 rounded-md h-full min-h-[340px] flex flex-col items-center justify-center p-4 bg-white shadow-sm text-center">
               <p class="font-black text-lg text-slate-900 leading-tight">ESP32<br/>Module</p>
             </div>
 
-            <!-- Arrows Center to Right (1 Col) -->
             <div class="hidden md:flex md:col-span-1 flex-col justify-around h-full py-8 items-center text-slate-900 font-mono font-black">
               <span>───►</span>
               <span>───►</span>
@@ -516,7 +507,6 @@
               <span>───►</span>
             </div>
 
-            <!-- Right Outputs (3 Cols) -->
             <div class="md:col-span-3 space-y-4">
               <div class="border-2 border-slate-900 rounded-md p-3 text-center bg-white shadow-sm">
                 <p class="font-bold text-sm text-slate-900">16x2 I2C LCD Display</p>
@@ -542,7 +532,6 @@
             </div>
           </div>
 
-          <!-- Bottom Power Supply Box -->
           <div class="max-w-xs mx-auto mt-6 pt-3 border-t-2 border-slate-900 text-center">
             <div class="text-xs font-mono font-black text-slate-900 mb-1">▲ Power Lines (5V / 12V DC) ▲</div>
             <div class="border-2 border-slate-900 rounded-md p-3 bg-white shadow-sm">
@@ -553,7 +542,7 @@
         </div>
       </div>
 
-      <!-- Flow Chart Card (Matches Code_Generated_Image (1).png) -->
+      <!-- Flow Chart Card -->
       <div class="app-card rounded-3xl p-6 sm:p-8 space-y-6 bg-white">
         <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
           <div>
@@ -630,37 +619,50 @@
       </div>
     </section>
 
-    <!-- TAB 5: ADMIN OVERRIDE PANEL & FIREBASE / ESP32 SYNC (PIN: 0409) -->
+    <!-- TAB 5: ADMIN OVERRIDE PANEL, 3x RFID CARD & WALLET MANAGER & FIREBASE SYNC (PIN: 0409) -->
     <section id="tab-sync" class="hidden space-y-6">
-      <div class="app-card rounded-3xl p-6 space-y-5">
+      <div class="app-card rounded-3xl p-6 space-y-6">
         <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
           <div>
-            <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase">Admin Master Override Panel (PIN: 0409)</span>
-            <h3 class="text-lg font-black text-slate-900 mt-1">Remote Slot Force-Clear, Live OTP Inspector & Firebase Sync</h3>
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase">Admin Master Console (PIN: 0409)</span>
+            <h3 class="text-lg font-black text-slate-900 mt-1">3× RFID Card UID & Wallet Editor, Slot Overrides & Cloud Bridge</h3>
           </div>
-          <div class="flex gap-2">
-            <button type="button" onclick="adminClearLockout()" class="px-3.5 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 text-xs font-extrabold">Clear Gate Lockout</button>
-            <button type="button" onclick="resetDemoState()" class="px-3.5 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-extrabold">Force-Clear All Slots</button>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" onclick="adminClearLockout()" class="px-3.5 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 text-xs font-extrabold">Clear 10-Min Gate Ban</button>
+            <button type="button" onclick="resetDemoState()" class="px-3.5 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-extrabold">Force-Reset All Bays</button>
           </div>
         </div>
 
-        <!-- Remote Per-Slot Force Clear & Live OTP Table -->
-        <div class="space-y-2">
-          <h4 class="text-xs font-black uppercase tracking-wider text-slate-500">Live Slot Inspector & Remote Force-Clear</h4>
+        <!-- 1. LIVE 3x RFID CARD UID, WALLET RECHARGE & LOST-TAG DEACTIVATION EDITOR -->
+        <div class="space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h4 class="text-sm font-black text-slate-900">1. Manage 3× RFID Cards (Edit Hex UID, Wallet Amount & Lost-RFID Fallback)</h4>
+              <p class="text-xs text-slate-500">Enter your 3 physical MFRC522 card UIDs and recharge wallet balances. Toggle <strong>"Lost Card"</strong> to test OTP-only fallback.</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full bg-orange-100 text-[#FC8019] font-mono text-[11px] font-bold">Instant Firebase Sync</span>
+          </div>
+          <div id="admin-rfid-editor" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+        </div>
+
+        <!-- 2. Remote Per-Slot Force Clear & Live OTP Table -->
+        <div class="space-y-2 pt-4 border-t border-slate-100">
+          <h4 class="text-sm font-black text-slate-900">2. Live Slot Inspector & Remote Force-Clear</h4>
           <div id="admin-slots-table" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
+        <!-- 3. Firebase & ESP32 IP Configuration -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-4 border-t border-slate-100">
           <div class="space-y-2">
             <label class="block text-xs font-extrabold text-slate-700">Firebase Realtime Database URL</label>
             <input id="sync-firebase-url" type="url" value="https://parksync-iot-default-rtdb.firebaseio.com" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 font-mono text-xs font-bold text-slate-900" />
           </div>
 
           <div class="space-y-2">
-            <label class="block text-xs font-extrabold text-slate-700">ESP32 Local IP Address (HTTP Bridge)</label>
+            <label class="block text-xs font-extrabold text-slate-700">ESP32 Local IP Address (HTTP Bridge + `/status` Poll)</label>
             <div class="flex gap-2">
               <input id="sync-esp-ip" type="text" placeholder="http://192.168.4.1" class="flex-1 px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 font-mono text-xs font-bold text-slate-900" />
-              <button type="button" onclick="saveSyncSettings(true)" class="px-4 py-2.5 rounded-xl bg-[#FC8019] text-white font-black text-xs">Sync ESP32</button>
+              <button type="button" onclick="saveSyncSettings(true)" class="px-4 py-2.5 rounded-xl bg-[#FC8019] text-white font-black text-xs">Test ESP32</button>
             </div>
           </div>
         </div>
@@ -675,7 +677,7 @@
             <input id="sync-room" type="text" value="parksync-ghatkesar-hub-2026" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 font-mono text-xs font-bold" />
           </div>
           <div class="flex items-end">
-            <button type="button" onclick="saveSyncSettings(false)" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs">Save All Settings</button>
+            <button type="button" onclick="saveSyncSettings(false)" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs">Save System Settings</button>
           </div>
         </div>
       </div>
@@ -698,8 +700,8 @@
 
       <div class="grid grid-cols-2 gap-2">
         <button type="button" onclick="selectModalRole(1)" id="modal-role-1" class="p-2.5 rounded-xl border text-left text-xs font-bold">Pass #1 • Hemanth</button>
-        <button type="button" onclick="selectModalRole(2)" id="modal-role-2" class="p-2.5 rounded-xl border text-left text-xs font-bold">Pass #2 • Rohan</button>
-        <button type="button" onclick="selectModalRole(3)" id="modal-role-3" class="p-2.5 rounded-xl border text-left text-xs font-bold">Pass #3 • Sneha</button>
+        <button type="button" onclick="selectModalRole(2)" id="modal-role-2" class="p-2.5 rounded-xl border text-left text-xs font-bold">Pass #2 • Prasanna</button>
+        <button type="button" onclick="selectModalRole(3)" id="modal-role-3" class="p-2.5 rounded-xl border text-left text-xs font-bold">Pass #3 • Charan</button>
         <button type="button" onclick="selectModalRole('admin')" id="modal-role-admin" class="p-2.5 rounded-xl border text-left text-xs font-bold text-[#FC8019]">Admin Override (0409)</button>
       </div>
 
@@ -728,17 +730,18 @@
 
   <script>
     // =========================================================================
-    // PARKSYNC v6.0 ENGINE — ALL 8 BASE-PAPER INNOVATIONS ACTIVE
+    // PARKSYNC MASTER ENGINE v8.0 — ALL FEATURES + LIVE RFID & WALLET EDITOR
     // =========================================================================
     const ADMIN_PIN = "0409";
     const DRIVER_PINS = { 1: "1234", 2: "1234", 3: "1234" };
     const DEFAULT_FIREBASE_URL = "https://parksync-iot-default-rtdb.firebaseio.com";
-    const STORAGE_KEY = "parksync_v7_complete_state";
+    const STORAGE_KEY = "parksync_v8_master_state";
 
     const clientInstanceId = "ps_" + Math.random().toString(36).substring(2, 10);
     let pendingTargetRole = 1;
     let mqttClient = null;
     let lastAppliedUpdatedAt = 0;
+    let soundEnabled = true;
 
     function createDefaultState() {
       return {
@@ -753,23 +756,23 @@
         lockoutUntil: 0,
         totalRevenue: 125,
         rfids: [
-          { id: 1, label: "FastTag Pass #1", uid: "A3:F1:9B:02", holder: "Hemanth Reddy", balance: 450, defaultVehicle: "TS 08 EK 4521", defaultPhone: "+91 6303505893" },
-          { id: 2, label: "FastTag Pass #2", uid: "B7:4C:2D:19", holder: "Rohan Sharma",  balance: 380, defaultVehicle: "TS 09 UA 8810", defaultPhone: "+91 9848022338" },
-          { id: 3, label: "FastTag Pass #3", uid: "E4:88:1A:55", holder: "Sneha Patel",   balance: 500, defaultVehicle: "TS 07 GP 1029", defaultPhone: "+91 9000112233" }
+          { id: 1, label: "FastTag Pass #1", uid: "A3:F1:9B:02", holder: "V. Hemanth Reddy", balance: 450, defaultVehicle: "TS 08 EK 4521", defaultPhone: "+91 6303505893", active: true },
+          { id: 2, label: "FastTag Pass #2", uid: "B7:4C:2D:19", holder: "T. Prasanna",       balance: 380, defaultVehicle: "TS 09 UA 8810", defaultPhone: "+91 9848022338", active: true },
+          { id: 3, label: "FastTag Pass #3", uid: "E4:88:1A:55", holder: "T. Charan Kumar",   balance: 500, defaultVehicle: "TS 07 GP 1029", defaultPhone: "+91 9000112233", active: true }
         ],
         slots: [
           {
             id: 1, code: "A1", name: "Bay A1 • Near Gate", status: "RED",
-            rfidId: 1, rfidUid: "A3:F1:9B:02", userName: "Hemanth Reddy",
+            rfidId: 1, rfidUid: "A3:F1:9B:02", userName: "V. Hemanth Reddy",
             vehicle: "TS 08 EK 4521", phone: "+91 6303505893",
-            entryTime: "18:00", exitTime: "19:00", durationMins: 60, cost: 50,
+            entryTime: "09:00", exitTime: "10:00", durationMins: 60, cost: 50,
             otp: "482915", irDetected: false
           },
           {
             id: 2, code: "A2", name: "Bay A2 • Center", status: "YELLOW",
-            rfidId: 2, rfidUid: "B7:4C:2D:19", userName: "Rohan Sharma",
+            rfidId: 2, rfidUid: "B7:4C:2D:19", userName: "T. Prasanna",
             vehicle: "TS 09 UA 8810", phone: "+91 9848022338",
-            entryTime: "17:30", exitTime: "19:00", durationMins: 90, cost: 75,
+            entryTime: "08:30", exitTime: "10:00", durationMins: 90, cost: 75,
             otp: "739104", irDetected: true
           },
           {
@@ -781,8 +784,8 @@
           }
         ],
         smsLogs: [
-          { id: 101, time: "18:00:12", rfidId: 1, to: "+91 6303505893", bay: "A1", otp: "482915", text: "ParkSync Pass: Bay A1 Pre-Booked for TS 08 EK 4521. 6-Digit Entry OTP: 482915. Fare: Rs.50." },
-          { id: 102, time: "17:31:05", rfidId: 2, to: "+91 9848022338", bay: "A2", otp: "739104", text: "ParkSync Entry Gate Opened! Vehicle TS 09 UA 8810 allotted to Bay A2." }
+          { id: 101, time: "09:00:12", rfidId: 1, to: "+91 6303505893", bay: "A1", otp: "482915", text: "ParkSync Pass: Bay A1 Pre-Booked for TS 08 EK 4521. 6-Digit Entry OTP: 482915. Fare: Rs.50." },
+          { id: 102, time: "08:31:05", rfidId: 2, to: "+91 9848022338", bay: "A2", otp: "739104", text: "ParkSync Entry Gate Opened! Vehicle TS 09 UA 8810 allotted to Bay A2." }
         ]
       };
     }
@@ -799,6 +802,9 @@
           parsed.firebaseUrl = parsed.firebaseUrl || DEFAULT_FIREBASE_URL;
           parsed.failedOtpAttempts = parsed.failedOtpAttempts || 0;
           parsed.lockoutUntil = parsed.lockoutUntil || 0;
+          if (Array.isArray(parsed.rfids)) {
+            parsed.rfids.forEach(r => { if (typeof r.active === 'undefined') r.active = true; });
+          }
           return parsed;
         }
       } catch (e) {}
@@ -818,7 +824,7 @@
     }
 
     // =========================================================================
-    // REAL-TIME FIREBASE + MQTT SYNC
+    // REAL-TIME FIREBASE + MQTT + ESP32 HARDWARE POLLING
     // =========================================================================
     function getFirebaseEndpoint() {
       const base = (state.firebaseUrl || DEFAULT_FIREBASE_URL).trim().replace(/\/+$/, "");
@@ -849,9 +855,38 @@
       } catch (e) {}
     }
 
+    async function pollEsp32Status() {
+      if (!state.espIp) return;
+      const base = state.espIp.replace(/\/+$/, "");
+      try {
+        const controller = new AbortController();
+        setTimeout(() => controller.abort(), 1800);
+        const res = await fetch(`${base}/status`, { signal: controller.signal });
+        if (!res.ok) return;
+        const hw = await res.json();
+        const ind = document.getElementById("esp-live-indicator");
+        if (ind) {
+          ind.textContent = "ESP32 + SIM800L: Online";
+          ind.className = "px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-300";
+        }
+        if (hw && Array.isArray(hw.bays)) {
+          let changed = false;
+          hw.bays.forEach((b, idx) => {
+            if (state.slots[idx] && typeof b.ir === 'boolean' && state.slots[idx].irDetected !== b.ir) {
+              state.slots[idx].irDetected = b.ir;
+              changed = true;
+            }
+          });
+          if (changed) saveState(true);
+        }
+      } catch (e) {}
+    }
+
     function initCloudSync() {
       pullFromFirebase();
       setInterval(pullFromFirebase, 2500);
+      setInterval(pollEsp32Status, 3500);
+
       setInterval(() => {
         if (state.lockoutUntil && Date.now() < state.lockoutUntil) {
           renderAll();
@@ -863,7 +898,7 @@
       }, 1000);
 
       try {
-        const topic = `parksync/global/v7/${state.syncRoom}/state`;
+        const topic = `parksync/global/v8/${state.syncRoom}/state`;
         mqttClient = mqtt.connect("wss://broker.emqx.io:8084/mqtt", {
           clientId: clientInstanceId,
           clean: true,
@@ -890,16 +925,23 @@
     function publishCloudState() {
       pushToFirebase();
       if (mqttClient && mqttClient.connected) {
-        const topic = `parksync/global/v7/${state.syncRoom}/state`;
+        const topic = `parksync/global/v8/${state.syncRoom}/state`;
         const packet = JSON.stringify({ senderId: clientInstanceId, updatedAt: state.updatedAt, payload: state });
         mqttClient.publish(topic, packet, { qos: 0, retain: true });
       }
     }
 
     // =========================================================================
-    // AUDIO BUZZER SYNTHESIZER (FOR WRONG-SLOT & 3-STRIKE LOCKOUT ALERTS)
+    // AUDIO BUZZER & BROWSER PUSH NOTIFICATIONS
     // =========================================================================
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById("sound-label").textContent = soundEnabled ? "Audio ON" : "Muted";
+      showToast(soundEnabled ? "Gate Buzzer Audio Enabled" : "Gate Buzzer Audio Muted", "info");
+    }
+
     function playBuzzerBeep(freq = 880, durationMs = 220, count = 2) {
+      if (!soundEnabled) return;
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
         for (let i = 0; i < count; i++) {
@@ -915,6 +957,28 @@
           osc.stop(start + durationMs / 1000);
         }
       } catch (e) {}
+    }
+
+    function requestBrowserNotifications() {
+      if (!("Notification" in window)) {
+        showToast("Browser notifications not supported on this device", "error");
+        return;
+      }
+      Notification.requestPermission().then(perm => {
+        if (perm === "granted") {
+          document.getElementById("notify-label").textContent = "Alerts ON";
+          showToast("Browser Push Notifications Enabled!", "success");
+          new Notification("ParkSync IoT Hub", { body: "Live Gate & OTP Notifications are now active!" });
+        } else {
+          showToast("Notification permission denied", "error");
+        }
+      });
+    }
+
+    function sendBrowserNotification(title, body) {
+      if ("Notification" in window && Notification.permission === "granted") {
+        try { new Notification(title, { body }); } catch (e) {}
+      }
     }
 
     // =========================================================================
@@ -960,7 +1024,7 @@
         }
         currentRole = 'admin';
         closeAuthModal();
-        showToast("Admin Master Override Panel Unlocked!", "success");
+        showToast("Admin Master Console Unlocked!", "success");
         renderAll();
       } else {
         const expected = DRIVER_PINS[pendingTargetRole] || "1234";
@@ -979,6 +1043,7 @@
 
     function isOwnerOfSlot(slot) {
       if (currentRole === 'admin') return true;
+      if (slot.rfidId === 0) return true; // Guest OTP-only booking
       return slot.rfidId === currentRole;
     }
 
@@ -1016,7 +1081,7 @@
     function handleBookingSubmit(e) {
       e.preventDefault();
       const slotId = parseInt(document.getElementById("book-slot").value, 10);
-      const rfidId = parseInt(document.getElementById("book-rfid").value, 10);
+      const rfidId = parseInt(document.getElementById("book-rfid").value, 10); // 0 = Guest OTP-only
       const name = document.getElementById("book-name").value.trim();
       const vehicle = document.getElementById("book-vehicle").value.trim().toUpperCase();
       const phone = document.getElementById("book-phone").value.trim();
@@ -1029,15 +1094,17 @@
         return;
       }
 
-      if (currentRole !== 'admin' && rfidId !== currentRole) {
+      if (rfidId !== 0 && currentRole !== 'admin' && rfidId !== currentRole) {
         showToast(`Account Lock: Logged into Pass #${currentRole}. Switch pass to book for Pass #${rfidId}.`, "error");
         return;
       }
 
-      const existingActive = state.slots.find(s => s.status !== "GREEN" && s.rfidId === rfidId);
-      if (existingActive) {
-        showToast(`Pass #${rfidId} already has an active booking in Bay ${existingActive.code}!`, "error");
-        return;
+      if (rfidId !== 0) {
+        const existingActive = state.slots.find(s => s.status !== "GREEN" && s.rfidId === rfidId);
+        if (existingActive) {
+          showToast(`Pass #${rfidId} already holds an active booking in Bay ${existingActive.code}!`, "error");
+          return;
+        }
       }
 
       const slot = state.slots.find(s => s.id === slotId);
@@ -1047,20 +1114,24 @@
       }
 
       const { mins, cost } = getCalculatedFare();
-      const passObj = state.rfids.find(r => r.id === rfidId);
-      if (passObj.balance < cost) {
-        showToast("Insufficient FastTag Wallet Balance!", "error");
-        return;
+      let assignedUid = "GUEST-OTP-ONLY";
+
+      if (rfidId !== 0) {
+        const passObj = state.rfids.find(r => r.id === rfidId);
+        if (passObj.balance < cost) {
+          showToast(`Insufficient Wallet Balance on ${passObj.label} (₹${passObj.balance})! Recharge in Admin tab.`, "error");
+          return;
+        }
+        passObj.balance -= cost;
+        assignedUid = passObj.active ? passObj.uid : `${passObj.uid} (LOST-FALLBACK)`;
       }
 
-      // Generate 6-Digit OTP
-      const otp = String(Math.floor(100000 + Math.random() * 900000));
-      passObj.balance -= cost;
       state.totalRevenue += cost;
+      const otp = String(Math.floor(100000 + Math.random() * 900000));
 
       slot.status = "RED";
-      slot.rfidId = rfidId;
-      slot.rfidUid = passObj.uid;
+      slot.rfidId = rfidId === 0 ? currentRole : rfidId;
+      slot.rfidUid = assignedUid;
       slot.userName = name;
       slot.vehicle = vehicle;
       slot.phone = phone;
@@ -1076,7 +1147,7 @@
       state.smsLogs.unshift({
         id: Date.now(),
         time: timeStr,
-        rfidId: rfidId,
+        rfidId: slot.rfidId,
         to: phone,
         bay: slot.code,
         otp: otp,
@@ -1086,14 +1157,14 @@
       document.getElementById("quick-otp-input").value = otp;
       playBuzzerBeep(1040, 120, 1);
       showSmsBanner(phone, smsBody, otp);
+      sendBrowserNotification(`ParkSync Bay ${slot.code} Reserved`, `6-Digit Gate OTP: ${otp} (${vehicle})`);
       saveState(true);
 
-      const q = `/book?bay=${slot.id}&otp=${encodeURIComponent(otp)}&phone=${encodeURIComponent(phone)}&vehicle=${encodeURIComponent(vehicle)}&mins=${mins}&cost=${cost}&rfid=${encodeURIComponent(passObj.uid)}`;
+      const q = `/book?bay=${slot.id}&otp=${encodeURIComponent(otp)}&phone=${encodeURIComponent(phone)}&vehicle=${encodeURIComponent(vehicle)}&mins=${mins}&cost=${cost}&rfid=${encodeURIComponent(assignedUid)}`;
       sendEspCommand(q);
     }
 
     function verifyOtpAndOpenEntryGate(rawOtp) {
-      // Check 10-Minute Ban / Lockout
       if (state.lockoutUntil && Date.now() < state.lockoutUntil) {
         const remSec = Math.ceil((state.lockoutUntil - Date.now()) / 1000);
         playBuzzerBeep(280, 350, 3);
@@ -1113,7 +1184,7 @@
         playBuzzerBeep(300, 300, 2);
 
         if (state.failedOtpAttempts >= 3) {
-          state.lockoutUntil = Date.now() + 10 * 60 * 1000; // 10-minute ban
+          state.lockoutUntil = Date.now() + 10 * 60 * 1000;
           saveState(true);
           showToast("SECURITY LOCKOUT: 3 wrong OTPs entered! Entry Gate banned for 10 minutes.", "error");
         } else {
@@ -1128,7 +1199,6 @@
         return;
       }
 
-      // Reset strikes & open Entry Gate #1
       state.failedOtpAttempts = 0;
       state.lockoutUntil = 0;
       slot.status = "YELLOW";
@@ -1146,6 +1216,7 @@
       });
 
       playBuzzerBeep(1200, 140, 2);
+      sendBrowserNotification(`Entry Gate #1 Opened`, `Vehicle ${slot.vehicle} allotted to Bay ${slot.code}`);
       saveState(true);
       sendEspCommand(`/gate?bay=${slot.id}&otp=${encodeURIComponent(otp)}`);
       showToast(`6-Digit OTP Verified! Entry Gate #1 Opened → Bay ${slot.code} is now YELLOW`, "success");
@@ -1157,6 +1228,12 @@
     }
 
     function simulateExitRfidTap(rfidId) {
+      const card = state.rfids.find(r => r.id === rfidId);
+      if (card && !card.active) {
+        playBuzzerBeep(280, 350, 2);
+        showToast(`LOST RFID BLOCKED: ${card.uid} is deactivated! Use Guard/OTP Exit button on the bay card.`, "error");
+        return;
+      }
       if (currentRole !== 'admin' && currentRole !== rfidId) {
         showToast(`Switch to Pass #${rfidId} (PIN 1234) or Admin (0409) to scan this RFID card.`, "error");
         return;
@@ -1199,14 +1276,15 @@
         rfidId: oldRfid,
         to: oldPhone,
         bay: oldCode,
-        otp: "RFID-EXIT",
-        text: `Exit Gate #2 Opened via RFID! Vehicle ${oldVehicle} cleared Bay ${oldCode}. Total Bill: Rs.${oldCost}.`
+        otp: "EXIT-OK",
+        text: `Exit Gate #2 Opened! Vehicle ${oldVehicle} exited Bay ${oldCode}. Total Bill Paid: Rs.${oldCost}.`
       });
 
       playBuzzerBeep(980, 150, 2);
+      sendBrowserNotification(`Exit Gate #2 Opened`, `Bay ${oldCode} is now Vacant (Green).`);
       saveState(true);
       sendEspCommand(`/checkout?bay=${slotId}`);
-      showToast(`RFID Verified! Exit Gate #2 Opened & Bay ${oldCode} Reset to GREEN`, "success");
+      showToast(`Exit Gate #2 Opened & Bay ${oldCode} Reset to GREEN!`, "success");
 
       setTimeout(() => {
         state.exitGateOpen = false;
@@ -1235,16 +1313,74 @@
       showToast(`Bay ${code} booking cancelled/cleared → Reset to GREEN.`, "info");
     }
 
-    // Wrong-Slot IR Sensor Toggle
     function toggleIrSensor(slotId) {
       const slot = state.slots.find(s => s.id === slotId);
       if (!slot) return;
       slot.irDetected = !slot.irDetected;
       if (slot.irDetected && slot.status !== "YELLOW") {
         playBuzzerBeep(260, 350, 3);
-        showToast(`🚨 WRONG-SLOT ALARM! Car detected by IR Sensor in Bay ${slot.code} (${slot.status}) without authorization!`, "error");
+        showToast(`🚨 WRONG-SLOT ALARM! Car detected by IR Sensor in Bay ${slot.code} (${slot.status})!`, "error");
       }
       saveState(true);
+    }
+
+    // =========================================================================
+    // ADMIN: 3x RFID CARD UID, WALLET RECHARGE & LOST-CARD FALLBACK MANAGER
+    // =========================================================================
+    function saveRfidCardDetails(rfidId) {
+      if (currentRole !== 'admin') return;
+      const card = state.rfids.find(r => r.id === rfidId);
+      if (!card) return;
+
+      const newHolder = document.getElementById(`edit-rfid-holder-${rfidId}`).value.trim();
+      const newUid = document.getElementById(`edit-rfid-uid-${rfidId}`).value.trim().toUpperCase();
+      const newVeh = document.getElementById(`edit-rfid-veh-${rfidId}`).value.trim().toUpperCase();
+      const newPhone = document.getElementById(`edit-rfid-phone-${rfidId}`).value.trim();
+      const newBal = parseInt(document.getElementById(`edit-rfid-bal-${rfidId}`).value || "0", 10);
+
+      if (!newUid) {
+        showToast("RFID Card UID cannot be empty!", "error");
+        return;
+      }
+
+      card.holder = newHolder || card.holder;
+      card.uid = newUid;
+      card.defaultVehicle = newVeh || card.defaultVehicle;
+      card.defaultPhone = newPhone || card.defaultPhone;
+      card.balance = Math.max(0, isNaN(newBal) ? 0 : newBal);
+
+      state.slots.forEach(s => {
+        if (s.rfidId === rfidId) {
+          s.rfidUid = card.active ? card.uid : `${card.uid} (LOST-FALLBACK)`;
+          s.userName = card.holder;
+        }
+      });
+
+      saveState(true);
+      showToast(`Saved ${card.label}: UID ${card.uid} • Balance ₹${card.balance}`, "success");
+    }
+
+    function quickTopUpRfid(rfidId, addAmount) {
+      if (currentRole !== 'admin') return;
+      const card = state.rfids.find(r => r.id === rfidId);
+      if (!card) return;
+      card.balance = Math.max(0, (card.balance || 0) + addAmount);
+      saveState(true);
+      showToast(`Recharged +₹${addAmount} to ${card.label} (New Balance: ₹${card.balance})`, "success");
+    }
+
+    function toggleRfidLostStatus(rfidId) {
+      if (currentRole !== 'admin') return;
+      const card = state.rfids.find(r => r.id === rfidId);
+      if (!card) return;
+      card.active = !card.active;
+      saveState(true);
+      showToast(
+        card.active
+          ? `${card.label} (${card.uid}) Reactivated!`
+          : `Lost-RFID Fallback Active: ${card.uid} Deactivated! Driver can still use 6-digit OTP.`,
+        card.active ? "success" : "info"
+      );
     }
 
     function adminForceClearSlot(slotId) {
@@ -1308,6 +1444,7 @@
         "---------------------------",
         `Pass: ${pass.label} (${pass.uid})`,
         `Holder: ${pass.holder}`,
+        `Wallet Balance: Rs.${pass.balance}`,
         slot ? `Bay: ${slot.code} (${slot.status === 'RED' ? 'Pre-Booked' : 'Allotted'})` : "Bay: No Active Booking",
         slot ? `Vehicle: ${slot.vehicle}` : "",
         slot ? `6-Digit Gate OTP: ${slot.otp}` : "",
@@ -1333,8 +1470,8 @@
     // UI RENDERING
     // =========================================================================
     function getCalculatedFare() {
-      const entry = document.getElementById("book-entry").value || "18:00";
-      const exit = document.getElementById("book-exit").value || "19:00";
+      const entry = document.getElementById("book-entry").value || "09:00";
+      const exit = document.getElementById("book-exit").value || "10:00";
       const [h1, m1] = entry.split(":").map(Number);
       const [h2, m2] = exit.split(":").map(Number);
       let mins = (h2 * 60 + m2) - (h1 * 60 + m1);
@@ -1361,6 +1498,21 @@
       recalculateFare();
     }
 
+    function handleRfidSelectChange() {
+      const rfidId = parseInt(document.getElementById("book-rfid").value || "1", 10);
+      if (rfidId === 0) {
+        document.getElementById("form-wallet-balance").textContent = "Guest Pay";
+        return;
+      }
+      const pass = state.rfids.find(r => r.id === rfidId);
+      if (pass) {
+        document.getElementById("book-name").value = pass.holder;
+        document.getElementById("book-vehicle").value = pass.defaultVehicle;
+        document.getElementById("book-phone").value = pass.defaultPhone;
+        document.getElementById("form-wallet-balance").textContent = `₹${pass.balance}`;
+      }
+    }
+
     function syncFormWithCurrentRole() {
       if (currentRole === 'admin') return;
       const pass = state.rfids.find(r => r.id === currentRole);
@@ -1374,6 +1526,10 @@
 
     function updateFormWalletDisplay() {
       const rfidId = parseInt(document.getElementById("book-rfid").value || "1", 10);
+      if (rfidId === 0) {
+        document.getElementById("form-wallet-balance").textContent = "Guest Pay";
+        return;
+      }
       const pass = state.rfids.find(r => r.id === rfidId);
       if (pass) {
         document.getElementById("form-wallet-balance").textContent = `₹${pass.balance}`;
@@ -1382,7 +1538,7 @@
 
     function switchTab(tabName) {
       if (tabName === 'sync' && currentRole !== 'admin') {
-        showToast("Admin Panel requires Secret Code (0409)", "error");
+        showToast("Admin & RFID Editor requires Secret Code (0409)", "error");
         openAuthModal('admin');
         return;
       }
@@ -1454,7 +1610,6 @@
 
       document.getElementById("keypad-lock-badge").textContent = `${state.failedOtpAttempts || 0}/3 Strikes`;
 
-      // Dual Gate Arms
       const entryArm = document.getElementById("entry-boom-arm");
       const entryBadge = document.getElementById("entry-gate-badge");
       if (state.entryGateOpen) {
@@ -1479,7 +1634,17 @@
         exitBadge.className = "px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-red-500/20 text-red-300";
       }
 
-      // IR Sensor Toggles
+      // Render Dynamic Exit RFID Tap Buttons
+      const exitBtns = document.getElementById("exit-rfid-buttons");
+      if (exitBtns) {
+        exitBtns.innerHTML = state.rfids.map(r => `
+          <button type="button" onclick="simulateExitRfidTap(${r.id})" class="p-2.5 rounded-xl ${r.active ? 'bg-slate-50 hover:bg-emerald-50 border-slate-200' : 'bg-red-50 border-red-200'} border text-left transition">
+            <span class="text-[10px] font-bold ${r.active ? 'text-emerald-700' : 'text-red-600'} block">${r.active ? `EXIT RFID #${r.id}` : `LOST / BLOCKED #${r.id}`}</span>
+            <span class="font-mono font-black text-xs text-slate-900">${r.uid}</span>
+          </button>
+        `).join("");
+      }
+
       const irGrid = document.getElementById("ir-sensor-toggles");
       if (irGrid) {
         irGrid.innerHTML = state.slots.map(sl => {
@@ -1494,23 +1659,77 @@
       }
     }
 
+    function renderAdminRfidEditor() {
+      const container = document.getElementById("admin-rfid-editor");
+      if (!container) return;
+      // Don't overwrite while Admin is actively typing in an input inside the editor
+      if (container.contains(document.activeElement)) return;
+
+      container.innerHTML = state.rfids.map(r => `
+        <div class="p-4 rounded-2xl ${r.active ? 'bg-orange-50/50 border-orange-200' : 'bg-red-50 border-red-300'} border-2 space-y-2.5 text-xs">
+          <div class="flex items-center justify-between">
+            <span class="font-black text-slate-900">${r.label}</span>
+            <span class="px-2.5 py-0.5 rounded-full ${r.active ? 'bg-emerald-100 text-emerald-800' : 'bg-red-600 text-white'} font-mono font-black text-xs">₹${r.balance}</span>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">MFRC522 Card Hex UID</label>
+            <input id="edit-rfid-uid-${r.id}" type="text" value="${r.uid}" class="w-full px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 font-mono font-black uppercase text-slate-900" />
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">Holder Name</label>
+              <input id="edit-rfid-holder-${r.id}" type="text" value="${r.holder}" class="w-full px-2 py-1.5 rounded-lg bg-white border border-slate-200 font-semibold text-slate-900" />
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">Vehicle No</label>
+              <input id="edit-rfid-veh-${r.id}" type="text" value="${r.defaultVehicle}" class="w-full px-2 py-1.5 rounded-lg bg-white border border-slate-200 font-mono font-bold uppercase text-slate-900" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">Registered Mobile</label>
+            <input id="edit-rfid-phone-${r.id}" type="text" value="${r.defaultPhone}" class="w-full px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 font-mono font-bold text-slate-900" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">Wallet Amount (₹) & Quick Top-Up</label>
+            <div class="flex gap-1">
+              <input id="edit-rfid-bal-${r.id}" type="number" min="0" value="${r.balance}" class="w-24 px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 font-mono font-black text-emerald-700" />
+              <button type="button" onclick="quickTopUpRfid(${r.id}, 100)" class="flex-1 py-1.5 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-black text-[11px]">+₹100</button>
+              <button type="button" onclick="quickTopUpRfid(${r.id}, 500)" class="flex-1 py-1.5 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-black text-[11px]">+₹500</button>
+            </div>
+          </div>
+          <div class="flex gap-1.5 pt-1">
+            <button type="button" onclick="saveRfidCardDetails(${r.id})" class="flex-1 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs">Save Card #${r.id}</button>
+            <button type="button" onclick="toggleRfidLostStatus(${r.id})" class="px-2.5 py-2 rounded-xl ${r.active ? 'bg-red-100 text-red-700' : 'bg-emerald-600 text-white'} font-bold text-[11px]">${r.active ? 'Mark Lost' : 'Reactivate'}</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
     function renderAll() {
-      // Role Badge
       const roleBadge = document.getElementById("current-role-badge");
       if (currentRole === 'admin') {
         roleBadge.textContent = "Admin Override (0409)";
       } else {
         const p = state.rfids.find(r => r.id === currentRole);
-        roleBadge.textContent = `Pass #${p.id}: ${p.holder.split(" ")[0]}`;
+        roleBadge.textContent = `Pass #${p.id}: ${p.holder.split(" ")[0]} (₹${p.balance})`;
       }
 
-      [1, 2, 3, 'admin'].forEach(r => {
+      [1, 2, 3].forEach(r => {
         const btn = document.getElementById(`quick-role-${r}`);
-        if (!btn) return;
-        btn.className = r === currentRole
-          ? "px-3 py-1.5 rounded-xl text-xs font-extrabold bg-[#FC8019] text-white border border-[#FC8019] shadow-sm transition"
-          : "px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 transition";
+        const card = state.rfids.find(x => x.id === r);
+        if (btn && card) {
+          btn.textContent = `Pass #${r} (${card.uid} • ₹${card.balance})`;
+          btn.className = r === currentRole
+            ? "px-3 py-1.5 rounded-xl text-xs font-extrabold bg-[#FC8019] text-white border border-[#FC8019] shadow-sm transition"
+            : "px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 transition";
+        }
       });
+      const adminBtn = document.getElementById("quick-role-admin");
+      if (adminBtn) {
+        adminBtn.className = currentRole === 'admin'
+          ? "px-3 py-1.5 rounded-xl text-xs font-extrabold bg-[#FC8019] text-white border border-[#FC8019] shadow-sm transition flex items-center gap-1"
+          : "px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 transition flex items-center gap-1";
+      }
 
       // Wrong-Slot Banner
       const wrongSlots = state.slots.filter(s => s.irDetected && s.status !== "YELLOW");
@@ -1561,11 +1780,11 @@
           <div class="rounded-2xl p-4 bg-slate-900 text-white flex flex-wrap items-center justify-between gap-3">
             <div class="flex items-center gap-2">
               <span class="px-2 py-0.5 rounded bg-[#F9C935] text-slate-950 font-mono font-black text-[10px]">ADMIN OVERRIDE MODE</span>
-              <span class="text-xs text-slate-300">All 6-digit OTPs unmasked • Remote Force-Clear enabled</span>
+              <span class="text-xs text-slate-300">All 6-digit OTPs unmasked • Remote Force-Clear & RFID Wallet Editor enabled</span>
             </div>
             <div class="flex flex-wrap gap-1.5">
               ${state.slots.map(s => `<button type="button" onclick="adminForceClearSlot(${s.id})" class="px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-red-600 text-xs font-bold transition">Force-Clear ${s.code}</button>`).join("")}
-              <button type="button" onclick="resetDemoState()" class="px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-500 text-xs font-black">Reset All</button>
+              <button type="button" onclick="switchTab('sync')" class="px-3 py-1.5 rounded-lg bg-[#FC8019] text-white text-xs font-black">Edit RFIDs & Wallets</button>
             </div>
           </div>
         `;
@@ -1580,7 +1799,7 @@
       document.getElementById("kpi-gate-state").textContent =
         state.entryGateOpen ? "ENTRY OPEN" : (state.exitGateOpen ? "EXIT OPEN" : "GATES LOCKED");
       document.getElementById("kpi-revenue").textContent = `Total: ₹${state.totalRevenue}`;
-      document.getElementById("otp-attempts-pill").textContent = `Attempts: ${state.failedOtpAttempts || 0}/3`;
+      document.getElementById("otp-attempts-pill").textContent = `Strikes: ${state.failedOtpAttempts || 0}/3`;
 
       // Active Ticket Banner
       const banner = document.getElementById("active-ticket-banner");
@@ -1652,6 +1871,7 @@
             <div class="space-y-1.5 text-xs">
               <p class="font-black text-sm text-slate-900">${owned ? slot.vehicle : "🔒 Locked to Pass #" + slot.rfidId}</p>
               <p class="text-slate-600 font-medium">Driver: <strong>${owned ? slot.userName : "Pass #" + slot.rfidId}</strong></p>
+              <p class="text-slate-500 font-mono text-[11px]">RFID: ${owned ? slot.rfidUid : "🔒 Masked"}</p>
               <p class="text-slate-500 font-mono text-[11px]">Phone: ${owned ? slot.phone : maskPhone(slot.phone)}</p>
               <p class="text-slate-500 font-mono text-[11px]">IR Sensor: <strong>${slot.irDetected ? '🚗 Car Detected' : '⚪ Waiting Arrival'}</strong></p>
               <div class="pt-1 flex items-center justify-between border-t border-slate-200/70">
@@ -1661,18 +1881,21 @@
             </div>
             ${owned
               ? (isRed
-                  ? `<div class="flex gap-1.5">
-                       <button type="button" onclick="verifyOtpAndOpenEntryGate('${slot.otp}')" class="flex-1 py-2.5 rounded-xl bg-[#FC8019] hover:bg-[#e36b09] text-white font-black text-xs">Entry Gate OTP</button>
-                       <button type="button" onclick="cancelSlotBooking(${slot.id})" class="px-3 py-2.5 rounded-xl bg-red-100 text-red-700 font-bold text-xs">Cancel</button>
+                  ? `<div class="space-y-1.5">
+                       <div class="flex gap-1.5">
+                         <button type="button" onclick="verifyOtpAndOpenEntryGate('${slot.otp}')" class="flex-1 py-2.5 rounded-xl bg-[#FC8019] hover:bg-[#e36b09] text-white font-black text-xs">Entry Gate OTP</button>
+                         <button type="button" onclick="cancelSlotBooking(${slot.id})" class="px-3 py-2.5 rounded-xl bg-red-100 text-red-700 font-bold text-xs">Cancel</button>
+                       </div>
+                       <button type="button" onclick="toggleIrSensor(${slot.id})" class="w-full py-1 rounded-lg bg-slate-100 text-slate-600 font-bold text-[10px]">${slot.irDetected ? 'Clear IR Sensor' : 'Simulate Wrong-Slot IR Before OTP'}</button>
                      </div>`
-                  : `<button type="button" onclick="checkoutSlotViaExitGate(${slot.id})" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs">RFID Scan → Exit Gate</button>`)
+                  : `<button type="button" onclick="checkoutSlotViaExitGate(${slot.id})" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs">RFID / OTP Exit → Release Bay</button>`)
               : `<div class="py-2 px-3 rounded-xl bg-slate-100 text-slate-500 font-bold text-[11px] text-center">🔒 Protected (Pass #${slot.rfidId} Only)</div>`
             }
           </div>
         `;
       }).join("");
 
-      // Populate Admin Inspector Table
+      // Populate Admin Inspector Table & RFID Editor
       const adminTable = document.getElementById("admin-slots-table");
       if (adminTable) {
         adminTable.innerHTML = state.slots.map(s => `
@@ -1686,8 +1909,9 @@
           </div>
         `).join("");
       }
+      renderAdminRfidEditor();
 
-      // Form Dropdowns
+      // Form Dropdowns (Includes 3 RFID Cards + Guard-Assisted Guest OTP-Only Mode)
       const slotSelect = document.getElementById("book-slot");
       const openSlots = state.slots.filter(s => s.status === "GREEN");
       slotSelect.innerHTML = openSlots.length
@@ -1695,12 +1919,17 @@
         : `<option value="">No Green Bays Open</option>`;
 
       const rfidSelect = document.getElementById("book-rfid");
-      const currentRfidVal = rfidSelect.value;
-      rfidSelect.innerHTML = state.rfids.map(r => `<option value="${r.id}">${r.label} (${r.uid})</option>`).join("");
-      if (currentRole !== 'admin') {
+      const prevVal = rfidSelect.value;
+      rfidSelect.innerHTML =
+        state.rfids.map(r => `<option value="${r.id}">${r.label} (${r.uid} • ₹${r.balance})${r.active ? '' : ' [LOST-OTP FALLBACK]'}</option>`).join("") +
+        `<option value="0">Guard-Assisted Guest (OTP-Only • No RFID)</option>`;
+
+      if (prevVal === "0") {
+        rfidSelect.value = "0";
+      } else if (currentRole !== 'admin') {
         rfidSelect.value = String(currentRole);
-      } else if (currentRfidVal) {
-        rfidSelect.value = currentRfidVal;
+      } else if (prevVal) {
+        rfidSelect.value = prevVal;
       }
       updateFormWalletDisplay();
       recalculateFare();
